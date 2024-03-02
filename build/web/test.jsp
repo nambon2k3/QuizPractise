@@ -114,7 +114,10 @@
                     <input type="hidden" name="tid" value="${tid}">
                     <c:forEach items="${list}" var="q">
                         <div class="question" id="question">
-                            <p>${q.questionText}</p>
+                            <div class="d-flex" style="justify-content: space-between">
+                                <p>${q.questionText}</p>
+                                <p>${q.points} Ponits</p>
+                            </div>
                             <input class="answer" type="hidden" name="${q.questionID}" value="E">
                             <div class="options">
                                 <c:forEach var="qo" items="${q.getQuestionOption()}">                                
@@ -187,7 +190,7 @@
                 // Mark the selected option
                 selectedOption.classList.add('selected');
             }
-            
+
             function submitTest() {
                 document.getElementById('test-form').submit();
             }

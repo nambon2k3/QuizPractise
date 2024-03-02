@@ -102,26 +102,40 @@
     </head>
     <body>
         <header>
-            <h1>${t.testName}</h1>
+            <h1>Test Feedback</h1>
         </header>
 
 
         <div class="question-container" id="question-container">
             <!-- Example question and options (modify as needed) -->
-            <c:set value="1" var="index"/>
-            <input type="hidden" name="tid" value="${tid}">
             <c:forEach items="${list}" var="q">
                 <div class="question" id="question">
-                    <p>${q.questionText}</p>
-                    <input class="answer" type="hidden" name="${q.questionID}" value="E">
+                    <div class="d-flex" style="justify-content: space-between">
+                                <p>${q.questionText}</p>
+                                <p>${q.points} Ponits</p>
+                            </div>
                     <div class="options">
-                        <c:forEach var="qo" items="${q.getQuestionOption()}">                                
-                            <div class="option" onclick="selectOption(this, ${index})">${qo.optionName}. ${qo.optionText}</div>
+
+                        <c:forEach var="qo" items="${q.getQuestionOption()}">
+                            <c:set value="${null}" var="tmp"/>
+                            <c:forEach items="${listAnswer}" var="a">
+                                <c:if test="${a.questionID == q.questionID}">
+                                    <c:set value="${a}" var="tmp"/>
+                                </c:if> 
+                            </c:forEach>
+                            
+                            <c:if test="${tmp!= null && tmp.questionID == q.questionID && String.valueOf(tmp.userAnswer) == qo.optionName}">
+                                <div class="option" ${qo.isCorrect() ? 'style="background-color: #34ce57;"' : 'style="background-color: red;"'}>${qo.optionName}. ${qo.optionText}</div>
+                            </c:if> 
+                            <c:if test="${tmp == null || (tmp.questionID == q.questionID && String.valueOf(tmp.userAnswer) != qo.optionName)}">
+                                <div class="option">${qo.optionName}. ${qo.optionText}</div>
+                            </c:if> 
+
                         </c:forEach>
                     </div>
-                    <c:set value="${index + 1}" var="index"/>
                 </div>
             </c:forEach>
+            <a href="usertest"  class="btn btn-primary">Go back</a>
         </div>
 
 

@@ -107,12 +107,13 @@ public class AnswerDAO extends DBContext {
     }
 
     // Method to get answers for a specific question
-    public List<Answers> getListAnswerByQuestionId(int questionID) {
+    public List<Answers> getListAnswerByTestId(int testID, int userId) {
         List<Answers> answerList = new ArrayList<>();
-        String query = "SELECT * FROM Answers WHERE QuestionID = ?";
+        String query = "SELECT * FROM Answers WHERE TestID = ? And UserID = ?";
 
         try ( PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, questionID);
+            preparedStatement.setInt(1, testID);
+            preparedStatement.setInt(2, userId);
 
             try ( ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

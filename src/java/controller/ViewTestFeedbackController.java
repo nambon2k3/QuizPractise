@@ -5,6 +5,7 @@
 
 package controller;
 
+import dao.AnswerDAO;
 import dao.TestDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,7 +15,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.Answers;
 import model.Questions;
+import model.Users;
 
 /**
  *
@@ -58,9 +61,12 @@ public class ViewTestFeedbackController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        Users user = (Users) request.getSession().getAttribute("User");
         int tid = Integer.parseInt(request.getParameter("tid"));
         List<Questions> list = new TestDAO().getTestQuestions(tid);
+        List<Answers> listAnswer = new AnswerDAO().getListAnswerByTestId(tid, user.getUserID());
         request.setAttribute("list", list);
+        request.setAttribute("listAnswer", listAnswer);
         request.setAttribute("tid", tid);
         request.getRequestDispatcher("test-feedback.jsp").forward(request, response);
     } 
